@@ -1,80 +1,80 @@
-type,formula,taken_from,older_reference,note
-matching component ,a,Koleff et al. (2003),NA,joint presence
-matching component ,b,Koleff et al. (2003),NA,only sp/site x present
-matching component ,c,Koleff et al. (2003),NA,only sp/site y present
-matching component ,d,Koleff et al. (2003),NA,joint absence (double zero)
-existing index,(a+b+c)/((2*a+b+c)/2),Koleff et al. (2003),Whittaker (1960),beta_w
-existing index,(b+c)/2,Koleff et al. (2003),Cody (1975),beta_c
-existing index,(b+c),Koleff et al. (2003),Weiher & Boylen (1994),beta_wb
-existing index,((a+b+c)^2)/((a+b+c)^2 – 2*b*c),Koleff et al. (2003),Routledge (1977),beta_r
-existing index,log(2*a + b + c) – ((2*a*log(2))/(2*a+b+c)) – (((a+b)*log(a+b) + (a+c)*log(a+c))/(2*a+b+c)),Koleff et al. (2003),Routledge (1977),beta_I
-existing index,,Koleff et al. (2003),Routledge (1977),
-existing index,(b+c)/(2*a + b +c),Koleff et al. (2003),Wilson & Shmida (1984),beta_t
-existing index,(2*a + b +c)*(1-(a/(a+b+c))),Koleff et al. (2003),Magurran (1988),beta_m
-existing index,1-(a*(2*a + b + c)/(2*(a+b)*(a+c))),Koleff et al. (2003),Cody (1993),beta_co
-existing index,(b+c)/(a+b+c),Koleff et al. (2003),Colwell & Coddington (1994),beta_cc
-existing index,"min(b,c)/(a+b+c)",Koleff et al. (2003),Williams (1996),beta_-3
-existing index,(b*c + 1)/(((a+b+c)^2-(a+b+c))/2),Koleff et al. (2003),Williams (1996),
-existing index,a/(a+c),Koleff et al. (2003),Ruggiero et al. (1988),beta_rlb
-existing index,"min(b,c)/(min(b,c) + a)",Koleff et al. (2003),Lennon et al. (2001),beta_sim
-existing index,(2*abs(b-c))/(2*a + b + c),Koleff et al. (2003),Lennon et al. (2001),beta_gl
-existing index,1-( log((2*a + b + c)/(a + b + c))/log(2) ),Koleff et al. (2003),Lennon et al. (2001),beta_z
-existing index,b*c,Ulrich & Gotelli (2013),Stone & Roberts (1990),Classical C-score
-existing index,a*d,Ulrich & Gotelli (2013),Stone & Roberts (1992),Togetherness
-existing index,"a/(max(a + b, a + c))",Hubálek (1982),Braun-Blanquet (1932),A_1
-existing index,"a/(min(a + b, a + c))",Hubálek (1982),Simpson (1943),A_2 - degree of faunal resemblance
-existing index,a/(b + c),Hubálek (1982),Kulczynski (1927),A_3
-existing index,a/(a + b + c),Hubálek (1982),Jaccard (1901),A_4 – classical Jaccard
-existing index,a/(a + 0.5*(b+c)),Hubálek (1982),"Dice (1945), Sorensen (1948)",A_5 – classical Sorencen-Dice
-existing index,a/(a + 2*(b + c)),Hubálek (1982),Sokal & Sneath (1963),A_6 - ‘un_2’
-existing index,0.5*(a/(a+b) + a/(a+c)),Hubálek (1982),Kulczynski (1927),A_7
-existing index,(a/2)*(1/(a+b) + 1/(a+c)),Hubálek (1982),Driver & Kroeber (1932),A_8
-existing index,a/(a+b) + a/(a+c),Hubálek (1982),Johnson (1967),A_9
-existing index,(a*a – b*c)/((a+b)*(a+c)),Hubálek (1982),McConnaughey (1964),A_10
-existing index,a / (((a+b)*(a+c))^0.5 ),Hubálek (1982),"Driver & Kroeber (1932), Ochiai (1957)",A_11
-existing index,(a*a)/((a+b)*(a+c)),Hubálek (1982),Sorgenfrei (1959),A_12 – correlation ratio
-existing index,"a/(((a+b)*(a+c))^0.5) - 0.5*(max(a+b, a+c))",Hubálek (1982),Fager & McGowan (1963),A_13
-existing index,a/n,Hubálek (1982),Russell & Rao (1940),A_14
-existing index,a/(0.5*(a*b + a*c) + b*c),Hubálek (1982),Mountford (1962),A_15
-existing index,(a*b + b*c) / (a*b + 2*b*c + c*d),Hubálek (1982),Peirce (1884),A_16
-existing index,(a - (a+b)*(a+c)) / ((a+b)*(c+d)*(a+c)*(b+d)),Hubálek (1982),Eyraud (1936),A_17
-existing index,0.25*(a/(a+b) + a/(a+c) + d/(c+d) + d/(b+d)),Hubálek (1982),Sokal & Sneath (1963),A_18 - ‘un_4’
-existing index,(a+d) / (b+c),Hubálek (1982),Sokal & Sneath (1963),A_19 - ‘un_3’
-existing index,(a + d) / n,Hubálek (1982),Sokal & Michener (1958),A_20 – simple matching coefficient
-existing index,(50*pi)^(-1)* asin(((a + d) / n)^0.5),Hubálek (1982),"Goodall (1967), Austin & Colwell (1977)",A_21 – angular transformation of simple matching coefficient
-existing index,(a+d)/(a + 0.5*(b+c) + d),Hubálek (1982),Sokal & Sneath (1963),A_22 - ‘un_1’
-existing index,(a+d)/(a + 2*(b+c+d)),Hubálek (1982),Rogers & Tanimoto (1960),A_23
-existing index,(a+d-b-c)/n,Hubálek (1982),Hamann (1961),A_24
-existing index,(a*d)/(((a+b)*(c+d)*(a+c)*(b+d))^0.5),Hubálek (1982),Sokal & Sneath (1963),A_25 - ‘un_5’
-existing index,(a*d – b*c)/((a+c)*(b+d)),Hubálek (1982),Pierce (1884),A_26
-existing index,n*((a*d – b*c)^2)/((a+b)*(c+d)*(a+c)*(b+d)),Hubálek (1982),Pearson (1905),A_27 – chi-square for 2x2 contingency tables
-existing index,((n*((a*d – b*c)^2)/((a+b)*(c+d)*(a+c)*(b+d)))/(n + n*((a*d – b*c)^2)/((a+b)*(c+d)*(a+c)*(b+d))))^0.5,Hubálek (1982),Pearson (1905),A_28 – coefficient of mean square contingency
-existing index,sqrt(2) * (a*d - b*c) / (((a*d - b*c)^2 – (a+b)*(c+d)*(a+c)*(b+d))^0.5),Hubálek (1982),Cole (1949),A_29 – mean square contingency
-existing index,(a*d - b*c) / (((a+b)*(c+d)*(a+c)*(b+d))^0.5),Hubálek (1982),"Yule (1912), Pearson & Heron (1913)",A_30 – product-sum correlation coefficient or tetrachoric correlation
-existing index,(a*d - b*c)^2 / ((a+b)*(c+d)*(a+c)*(b+d)),Hubálek (1982),"Doolittle (1885), Pearson (1926)",A_31
-existing index,(sqrt(a*d) + a)/(sqrt(a*d) + a + b + c),Hubálek (1982),Baroni-Urbani & Buser (1976),A_32 - ‘S**’
-existing index,(sqrt(a*d) + a - b - c)/(sqrt(a*d) + a + b + c),Hubálek (1982),Baroni-Urbani & Buser (1976),A_33 - ‘S*’
-existing index,(a*d - b*c) / (a*d + b*c),Hubálek (1982),Yule (1900),A_36 – Q coefficient of association
-existing index,(sqrt(a*d) - sqrt(b*c)) / (sqrt(a*d) + sqrt(b*c)),Hubálek (1982),Yule (1900),A_37 – coefficient of colligation
-existing index,cos(180*sqrt(b*c) / (sqrt(a*d) + sqrt(b*c))),Hubálek (1982),Pearson & Heron (1913),A_38
-existing index,4*(a*d - b*c)/( (a+d)^2 + (b+c)^2 ),Hubálek (1982),Michael (1920),A_39
-existing index,n*a/((a+b)*(a+c)),Hubálek (1982),Forbes(1907),A_40
-existing index,log(a) – log(n) – log((a+b)/n) – log((a+c)/n),Hubálek (1982),Gilbert & Wells (1966),A_41
-existing index,"(n*a -(a+b)*(a+c)) / (n* min(a+b, a+c) – (a+b)*(a+c))",Hubálek (1982),Forbes (1925),A_42
-existing index,(n*a -(a+b)*(a+c)) / (n*a + (a+b)*(a+c)),Hubálek (1982),Tarwid (1960),A_43
-existing index,(3*a)/(3*a + b + c),Legendre & Legendre (2012),Legendre & Legendre (2012),S_8 – Sorensen with triple weight to double presences
-existing index,(a-b-c)/(2*n) + 0.5,Legendre & Legendre (2012),Faith (1983),S_26
-existing index,a/(a+b),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 2 – true positive volume fraction
-existing index,b/(a+b),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 3 – false negative volume fraction
-existing index,c/(a+b),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 4 – false positive volume fraction
-existing index,(b+c)/(4*n),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 5 – binary variance
-existing index,((b+c)^2)/(n^2),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 6 – binary size difference
-existing index,sqrt(b+c),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 7 – binary euclidean distance
-existing index,(b*c)/(n^2),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 8 – binary pattern distance
-existing index,(n*(b+c) – (b-c)^2)/(n^2),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 9 – binary shape difference
-existing index,(b+a)/(2*a + b + c),Rajagopalan et al. (2005),Lance & Williams (1916),Index 12
-existing index,(a^2)/((a+b)*(a+c)),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 16 – equivalence similarity
-existing index,a/(sqrt(b*c)),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 18 – binary cosine
-existing index,"a/(min(b, c))",Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 41 – binary overlap
-existing index,"((max(a,b) + max(c,d) + max(a,c) + max(b, d)) – (max(a+c,b+d) + max(a+b,c+d)))/(2*n)",Rajagopalan et al. (2005),Anderberg (1973),Index 46
-existing index,"((max(a,b) + max(c,d) + max(a,c) + max(b, d)) – (max(a+c,b+d) + max(a+b,c+d)))/(2*n – (max(a+c,b+d) + max(a+b,c+d)))",Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 45
+index_no,type,formula,taken_from,older_reference,note
+1,matching component ,a,Koleff et al. (2003),NA,joint presence
+2,matching component ,b,Koleff et al. (2003),NA,only sp/site x present
+3,matching component ,c,Koleff et al. (2003),NA,only sp/site y present
+4,matching component ,d,Koleff et al. (2003),NA,joint absence (double zero)
+5,existing index,(a+b+c)/((2*a+b+c)/2),Koleff et al. (2003),Whittaker (1960),beta_w
+6,existing index,(b+c)/2,Koleff et al. (2003),Cody (1975),beta_c
+7,existing index,(b+c),Koleff et al. (2003),Weiher & Boylen (1994),beta_wb
+8,existing index,((a+b+c)^2) / ((a+b+c)^2 - 2*b*c),Koleff et al. (2003),Routledge (1977),beta_r
+9,existing index,log(2*a + b + c) - ((2*a*log(2))/(2*a+b+c)) - (((a+b)*log(a+b) + (a+c)*log(a+c))/(2*a+b+c)),Koleff et al. (2003),Routledge (1977),beta_I
+10,existing index,exp(log(2*a + b + c) - ((2*a*log(2))/(2*a+b+c)) - (((a+b)*log(a+b) + (a+c)*log(a+c))/(2*a+b+c))) - 1,Koleff et al. (2003),Routledge (1977),beta_e
+11,existing index,(b+c)/(2*a + b +c),Koleff et al. (2003),Wilson & Shmida (1984),beta_t
+12,existing index,(2*a + b +c)*(1-(a/(a+b+c))),Koleff et al. (2003),Magurran (1988),beta_m
+13,existing index,1-(a*(2*a + b + c)/(2*(a+b)*(a+c))),Koleff et al. (2003),Cody (1993),beta_co
+14,existing index,(b+c)/(a+b+c),Koleff et al. (2003),Colwell & Coddington (1994),beta_cc
+15,existing index,"min(b,c)/(a+b+c)",Koleff et al. (2003),Williams (1996),beta_-3
+16,existing index,(b*c + 1)/(((a+b+c)^2-(a+b+c))/2),Koleff et al. (2003),Williams (1996),
+17,existing index,a/(a+c),Koleff et al. (2003),Ruggiero et al. (1988),beta_rlb
+18,existing index,"min(b,c)/(min(b,c) + a)",Koleff et al. (2003),Lennon et al. (2001),beta_sim
+19,existing index,(2*abs(b-c))/(2*a + b + c),Koleff et al. (2003),Lennon et al. (2001),beta_gl
+20,existing index,1-( log((2*a + b + c)/(a + b + c))/log(2) ),Koleff et al. (2003),Lennon et al. (2001),beta_z
+21,existing index,b*c,Ulrich & Gotelli (2013),Stone & Roberts (1990),Classical C-score
+22,existing index,a*d,Ulrich & Gotelli (2013),Stone & Roberts (1992),Togetherness
+23,existing index,"a/(max(a + b, a + c))",Hubálek (1982),Braun-Blanquet (1932),A_1
+24,existing index,"a/(min(a + b, a + c))",Hubálek (1982),Simpson (1943),A_2 - degree of faunal resemblance
+25,existing index,a/(b + c),Hubálek (1982),Kulczynski (1927),A_3
+26,existing index,a/(a + b + c),Hubálek (1982),Jaccard (1901),A_4 - classical Jaccard
+27,existing index,a/(a + 0.5*(b+c)),Hubálek (1982),"Dice (1945), Sorensen (1948)",A_5 - classical Sorencen-Dice
+28,existing index,a/(a + 2*(b + c)),Hubálek (1982),Sokal & Sneath (1963),A_6 - ‘un_2’
+29,existing index,0.5*(a/(a+b) + a/(a+c)),Hubálek (1982),Kulczynski (1927),A_7
+30,existing index,(a/2)*(1/(a+b) + 1/(a+c)),Hubálek (1982),Driver & Kroeber (1932),A_8
+31,existing index,a/(a+b) + a/(a+c),Hubálek (1982),Johnson (1967),A_9
+32,existing index,(a*a - b*c)/((a+b)*(a+c)),Hubálek (1982),McConnaughey (1964),A_10
+33,existing index,a / (((a+b)*(a+c))^0.5 ),Hubálek (1982),"Driver & Kroeber (1932), Ochiai (1957)",A_11
+34,existing index,(a*a)/((a+b)*(a+c)),Hubálek (1982),Sorgenfrei (1959),A_12 - correlation ratio
+35,existing index,"a/(((a+b)*(a+c))^0.5) - 0.5*(max(a+b, a+c))",Hubálek (1982),Fager & McGowan (1963),A_13
+36,existing index,a/n,Hubálek (1982),Russell & Rao (1940),A_14
+37,existing index,a/(0.5*(a*b + a*c) + b*c),Hubálek (1982),Mountford (1962),A_15
+38,existing index,(a*b + b*c) / (a*b + 2*b*c + c*d),Hubálek (1982),Peirce (1884),A_16
+39,existing index,(a - (a+b)*(a+c)) / ((a+b)*(c+d)*(a+c)*(b+d)),Hubálek (1982),Eyraud (1936),A_17
+40,existing index,0.25*(a/(a+b) + a/(a+c) + d/(c+d) + d/(b+d)),Hubálek (1982),Sokal & Sneath (1963),A_18 - ‘un_4’
+41,existing index,(a+d) / (b+c),Hubálek (1982),Sokal & Sneath (1963),A_19 - ‘un_3’
+42,existing index,(a + d) / n,Hubálek (1982),Sokal & Michener (1958),A_20 - simple matching coefficient
+43,existing index,(50*pi)^(-1)* asin(((a + d) / n)^0.5),Hubálek (1982),"Goodall (1967), Austin & Colwell (1977)",A_21 - angular transformation of simple matching coefficient
+44,existing index,(a+d)/(a + 0.5*(b+c) + d),Hubálek (1982),Sokal & Sneath (1963),A_22 - ‘un_1’
+45,existing index,(a+d)/(a + 2*(b+c+d)),Hubálek (1982),Rogers & Tanimoto (1960),A_23
+46,existing index,(a+d-b-c)/n,Hubálek (1982),Hamann (1961),A_24
+47,existing index,(a*d)/(((a+b)*(c+d)*(a+c)*(b+d))^0.5),Hubálek (1982),Sokal & Sneath (1963),A_25 - ‘un_5’
+48,existing index,(a*d - b*c)/((a+c)*(b+d)),Hubálek (1982),Pierce (1884),A_26
+49,existing index,n*((a*d - b*c)^2)/((a+b)*(c+d)*(a+c)*(b+d)),Hubálek (1982),Pearson (1905),A_27 - chi-square for 2x2 contingency tables
+50,existing index,((n*((a*d - b*c)^2)/((a+b)*(c+d)*(a+c)*(b+d)))/(n + n*((a*d - b*c)^2)/((a+b)*(c+d)*(a+c)*(b+d))))^0.5,Hubálek (1982),Pearson (1905),A_28 - coefficient of mean square contingency
+51,existing index,sqrt(2) * (a*d - b*c) / (((a*d - b*c)^2 - (a+b)*(c+d)*(a+c)*(b+d))^0.5),Hubálek (1982),Cole (1949),A_29 - mean square contingency
+52,existing index,(a*d - b*c) / (((a+b)*(c+d)*(a+c)*(b+d))^0.5),Hubálek (1982),"Yule (1912), Pearson & Heron (1913)",A_30 - product-sum correlation coefficient or tetrachoric correlation
+53,existing index,(a*d - b*c)^2 / ((a+b)*(c+d)*(a+c)*(b+d)),Hubálek (1982),"Doolittle (1885), Pearson (1926)",A_31
+54,existing index,(sqrt(a*d) + a)/(sqrt(a*d) + a + b + c),Hubálek (1982),Baroni-Urbani & Buser (1976),A_32 - ‘S**’
+55,existing index,(sqrt(a*d) + a - b - c)/(sqrt(a*d) + a + b + c),Hubálek (1982),Baroni-Urbani & Buser (1976),A_33 - ‘S*’
+56,existing index,(a*d - b*c) / (a*d + b*c),Hubálek (1982),Yule (1900),A_36 - Q coefficient of association
+57,existing index,(sqrt(a*d) - sqrt(b*c)) / (sqrt(a*d) + sqrt(b*c)),Hubálek (1982),Yule (1900),A_37 - coefficient of colligation
+58,existing index,cos(180*sqrt(b*c) / (sqrt(a*d) + sqrt(b*c))),Hubálek (1982),Pearson & Heron (1913),A_38
+59,existing index,4*(a*d - b*c)/( (a+d)^2 + (b+c)^2 ),Hubálek (1982),Michael (1920),A_39
+60,existing index,n*a/((a+b)*(a+c)),Hubálek (1982),Forbes(1907),A_40
+61,existing index,log(a) - log(n) - log((a+b)/n) - log((a+c)/n),Hubálek (1982),Gilbert & Wells (1966),A_41
+62,existing index,"(n*a -(a+b)*(a+c)) / (n* min(a+b, a+c) - (a+b)*(a+c))",Hubálek (1982),Forbes (1925),A_42
+63,existing index,(n*a -(a+b)*(a+c)) / (n*a + (a+b)*(a+c)),Hubálek (1982),Tarwid (1960),A_43
+64,existing index,(3*a)/(3*a + b + c),Legendre & Legendre (2012),Legendre & Legendre (2012),S_8 - Sorensen with triple weight to double presences
+65,existing index,(a-b-c)/(2*n) + 0.5,Legendre & Legendre (2012),Faith (1983),S_26
+66,existing index,a/(a+b),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 2 - true positive volume fraction
+67,existing index,b/(a+b),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 3 - false negative volume fraction
+68,existing index,c/(a+b),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 4 - false positive volume fraction
+69,existing index,(b+c)/(4*n),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 5 - binary variance
+70,existing index,((b+c)^2)/(n^2),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 6 - binary size difference
+71,existing index,sqrt(b+c),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 7 - binary euclidean distance
+72,existing index,(b*c)/(n^2),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 8 - binary pattern distance
+73,existing index,(n*(b+c) - (b-c)^2)/(n^2),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 9 - binary shape difference
+74,existing index,(b+a)/(2*a + b + c),Rajagopalan et al. (2005),Lance & Williams (1916),Index 12
+75,existing index,(a^2)/((a+b)*(a+c)),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 16 - equivalence similarity
+76,existing index,a/(sqrt(b*c)),Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 18 - binary cosine
+77,existing index,"a/(min(b, c))",Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 41 - binary overlap
+78,existing index,"((max(a,b) + max(c,d) + max(a,c) + max(b, d)) - (max(a+c,b+d) + max(a+b,c+d)))/(2*n)",Rajagopalan et al. (2005),Anderberg (1973),Index 46
+79,existing index,"((max(a,b) + max(c,d) + max(a,c) + max(b, d)) - (max(a+c,b+d) + max(a+b,c+d)))/(2*n - (max(a+c,b+d) + max(a+b,c+d)))",Rajagopalan et al. (2005),Rajagopalan et al. (2005),Index 45
