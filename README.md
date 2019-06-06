@@ -1,1 +1,12 @@
-Wacky_indices
+# Z-scores unify and improve indices of ecological resemblance
+
+Author: *Petr Keil*
+
+This is a code repository for a little simulation study which shows that 
+Z-scores can dramatically improve performance of metrics of similarity and
+association for binary data.
+
+License: GPL3
+
+
+
