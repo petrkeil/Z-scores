@@ -111,7 +111,7 @@ for (i in 1:nrow(formulas))
       m.bin <-  m
       m.bin[m >= 1] <- 1
 
-      Z <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 200, form = form)[]
+      Z <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = form)[]
       #Z <- Z_score_pair_analytic(m.bin, form = form)[]
       
       data.frame(Z = Z['Z'], obs = Z['obs'],
@@ -145,21 +145,32 @@ match <- filter(.data = for.plot,
                 type == "matching components")
 
 
+bx <- ggplot(data=for.plot, aes(x = type, y = abs(value))) + 
+  # geom_violin(aes(fill = color), scale = "width") +
+  geom_boxplot(width = 0.5, aes(fill = type), outlier.shape = 1) +
+  # stat_summary(fun.y=median, geom="point", size=2, aes(colour = type)) +
+  geom_label_repel(data = match, aes(x = type, y = abs(value), label = formula), 
+                   nudge_x = 0.1) +
+  facet_grid(cols = vars(raw_or_Z)) +
+  theme_bw() + #coord_flip() +
+  theme(legend.position="none") +
+  labs(y = "|Kendall's rank correlation with truth|", x = "")
+
 png("../results/simulation_results.png", width=1200, height=700, res=190)
-  ggplot(data=for.plot, aes(x = type, y = abs(value))) + 
-   # geom_violin(aes(fill = color), scale = "width") +
-    geom_boxplot(width = 0.5, aes(fill = type)) +
-   # stat_summary(fun.y=median, geom="point", size=2, aes(colour = type)) +
-    geom_label_repel(data = match, aes(x = type, y = abs(value), label = formula), 
-               nudge_x = 0.1) +
-    facet_grid(cols = vars(raw_or_Z)) +
-    theme_bw() + #coord_flip() +
-    theme(legend.position="none") +
-    labs(y = "|Kendall's rank correlation with truth|", x = "")
+  print(bx)
 dev.off()
+
+# boxplots medians
+ddply(for.plot, .(type, raw_or_Z), summarise, med = median(abs(value)))
+
+# boxplots inter-quartile range
+ddply(for.plot, .(type, raw_or_Z), summarise, med = sd(abs(value)))
+
 
 
 # which are the extremely poorly performing indices?
 x <- for.plot[for.plot$type == "existing index",]
 x <- x[order(abs(x$value)),]
+head(x)
+x <- x[order(abs(x$value), decreasing = TRUE),]
 head(x)

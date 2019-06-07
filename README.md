@@ -1,9 +1,9 @@
-# Z-scores unify and improve indices of ecological resemblance
+# Z-scores unite and improve indices of ecological resemblance
 
 Author: *Petr Keil*
 
 This is a code repository for a little simulation study which shows that 
-Z-scores can dramatically improve performance of metrics of similarity and
+Z-scores improve performance of metrics of similarity and
 association for binary data.
 
 License: GPL3
