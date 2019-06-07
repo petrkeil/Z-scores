@@ -33,7 +33,7 @@ index_no,type,formula,taken_from,older_reference,note
 32,existing index,(a*a - b*c)/((a+b)*(a+c)),Hubálek (1982),McConnaughey (1964),A_10
 33,existing index,a / (((a+b)*(a+c))^0.5 ),Hubálek (1982),"Driver & Kroeber (1932), Ochiai (1957)",A_11
 34,existing index,(a*a)/((a+b)*(a+c)),Hubálek (1982),Sorgenfrei (1959),A_12 - correlation ratio
-35,existing index,"a/(((a+b)*(a+c))^0.5) - 0.5*(max(a+b, a+c))",Hubálek (1982),Fager & McGowan (1963),A_13
+35,existing index,"a/(((a+b)*(a+c))^0.5) - 0.5*(max(a+b, a+c))^0.5",Hubálek (1982),Fager & McGowan (1963),A_13
 36,existing index,a/n,Hubálek (1982),Russell & Rao (1940),A_14
 37,existing index,a/(0.5*(a*b + a*c) + b*c),Hubálek (1982),Mountford (1962),A_15
 38,existing index,(a*b + b*c) / (a*b + 2*b*c + c*d),Hubálek (1982),Peirce (1884),A_16

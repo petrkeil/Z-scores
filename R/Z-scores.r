@@ -16,7 +16,7 @@ step_C_sim2 <- function(m)
   t(apply(X = m, MARGIN = 1, FUN = sample))
 }
 
-
+# function that calculates the given index (so far works for 2 species only)
 pk.dist <- function(m, form)
 {
   x <- m[1,] # species x
@@ -60,39 +60,8 @@ Z_score <- function(m, algorithm, N.sim, form)
 }
 
 
-# function that calculates the Z-score
-Z_score_old <- function(m, algorithm, N.sim, form)
-{
-  res <- array(dim=c(nrow(m), nrow(m), N.sim))
-
-  for(i in 1:N.sim)
-  {
-    # radnomize using a given algorithm
-    null.m <- do.call(algorithm, list(m))
-    # calculate the metric
-    null.metric <- as.matrix(vegan::designdist(null.m,
-                                               method = form,
-                                               abcd = TRUE,
-                                               terms = "binary"))
-    res[,,i] <- null.metric
-  }
-
-  # calculate the Z-score
-  obs <-vegan::designdist(m,
-                          method = form,
-                          abcd = TRUE,
-                          terms = "binary")
-  mean.null <- as.dist(apply(X = res, MARGIN = c(1,2), FUN = mean))
-  sd.null <- as.dist(apply(X = res, MARGIN = c(1,2), FUN = sd))
-
-  # the Z-score
-  Z <- (obs - mean.null) / sd.null
-  return(c(Z=Z, obs=obs))
-}
-
 #m <- matrix(c(1,1,1,0,0,
 #              0,0,1,1,0), byrow=TRUE, nrow=2, ncol=5)
-#Z_score_old(m, algorithm="step_C_sim2", N.sim=1000, form = "a/n")
 #Z_score(m, algorithm="step_C_sim2", N.sim=1000, form = "a/n")
 
 
@@ -109,14 +78,14 @@ gsub(x = formulas$formula, pattern = "n", replacement = "(a+b+c+d)")
 
 ################################################################################ 
 
-params <- expand.grid(var.consp   = c(0.001, 0.01),
-                      alpha = seq(-20, 20, by=5),
-                      grain = c(16, 8),
-                      N1 = c(100),
-                      N2 = c(100))
+params <- expand.grid(var.consp   = c(0.001, 0.01, 0.1),
+                      alpha = seq(-20, 20, by=2.5),
+                      grain = c(32, 16, 8),
+                      N1 = c(100, 1000),
+                      N2 = c(100, 1000))
 # params <- split(params, 1:nrow(params))
 
-registerDoMC(cores = 2)
+registerDoMC(cores = 4)
 
 output <- list()
 for (i in 1:nrow(formulas))
@@ -142,12 +111,13 @@ for (i in 1:nrow(formulas))
       m.bin <-  m
       m.bin[m >= 1] <- 1
 
-      Z <- Z_score2(m.bin, algorithm = "step_C_sim2", N.sim = 50, form = form)[]
+      Z <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 200, form = form)[]
       #Z <- Z_score_pair_analytic(m.bin, form = form)[]
       
       data.frame(Z = Z['Z'], obs = Z['obs'],
                              params[j,],
                              formula = form,
+                             index_no = formulas$index_no[i],
                              type = formulas$type[i])
     }
 
@@ -187,3 +157,9 @@ png("../results/simulation_results.png", width=1200, height=700, res=190)
     theme(legend.position="none") +
     labs(y = "|Kendall's rank correlation with truth|", x = "")
 dev.off()
+
+
+# which are the extremely poorly performing indices?
+x <- for.plot[for.plot$type == "existing index",]
+x <- x[order(abs(x$value)),]
+head(x)
