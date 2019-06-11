@@ -1,5 +1,15 @@
-library(devtools)
-#install_github("petrkeil/spasm")
+
+# Code for the Z-score analysis
+# Author: Petr Keil
+# pkeil@seznam.cz
+
+
+################################################################################ 
+# R packages
+################################################################################
+
+# library(devtools)
+# install_github("petrkeil/spasm")
 library(spasm)
 library(tidyverse)
 library(vegan)
@@ -8,15 +18,19 @@ library(foreach)
 library(doMC)
 library(ggrepel)
 
+################################################################################
+# Randomization algorithm (null model).
+################################################################################
 
-
-# ------------------------------------------------------------------------------
 step_C_sim2 <- function(m)
 {
   t(apply(X = m, MARGIN = 1, FUN = sample))
 }
 
+################################################################################
 # function that calculates the given index (so far works for 2 species only)
+################################################################################
+
 pk.dist <- function(m, form)
 {
   x <- m[1,] # species x
@@ -34,8 +48,10 @@ pk.dist <- function(m, form)
   return(D)
 }
 
-
+################################################################################
 # function that calculates the Z-score
+################################################################################
+
 Z_score <- function(m, algorithm, N.sim, form)
 {
   res <- array(dim=c(nrow(m), nrow(m), N.sim))
@@ -66,7 +82,7 @@ Z_score <- function(m, algorithm, N.sim, form)
 
 
 ################################################################################
-# FORMULAS
+# Index formulas
 ################################################################################
 
 list.of.formulas <- read.csv("../list_of_indices.csv") 
@@ -77,13 +93,18 @@ formulas$formula <- as.character(formulas$formula)
 gsub(x = formulas$formula, pattern = "n", replacement = "(a+b+c+d)") 
 
 ################################################################################ 
+# Simulation parameters
+################################################################################
 
 params <- expand.grid(var.consp   = c(0.001, 0.01, 0.1),
                       alpha = seq(-20, 20, by=2.5),
                       grain = c(32, 16, 8),
                       N1 = c(100, 1000),
                       N2 = c(100, 1000))
-# params <- split(params, 1:nrow(params))
+
+################################################################################ 
+# Simulations
+################################################################################
 
 registerDoMC(cores = 4)
 
@@ -126,12 +147,13 @@ for (i in 1:nrow(formulas))
 
 res <- ldply(output)
 write.csv(res, file = "../results/simulation_results.csv", row.names=FALSE)
-# ------------------------------------------------------------------------------
+
+################################################################################ 
+# Plotting results
+################################################################################
 
 res <- read.csv("../results/simulation_results.csv")
-
 res <- na.omit(res)
-
 
 for.plot <- ddply(.data = res,
                   .variables = c("formula", "type"),
@@ -164,7 +186,7 @@ dev.off()
 ddply(for.plot, .(type, raw_or_Z), summarise, med = median(abs(value)))
 
 # boxplots inter-quartile range
-ddply(for.plot, .(type, raw_or_Z), summarise, med = sd(abs(value)))
+ddply(for.plot, .(type, raw_or_Z), summarise, med = IQR(abs(value)))
 
 
 
