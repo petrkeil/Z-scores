@@ -17,6 +17,7 @@ library(plyr)
 library(foreach)
 library(doMC)
 library(ggrepel)
+library(gridExtra)
 
 ################################################################################
 # Randomization algorithm (null model).
@@ -158,13 +159,14 @@ res <- na.omit(res)
 for.plot <- ddply(.data = res,
                   .variables = c("formula", "type"),
                   .fun=summarise,
-                  Z_score = cor(alpha, Z, method= "kendall"),
-                  Raw_metric = cor(alpha, obs, method = "kendall")) %>%
+                  Z_score = cor(alpha, Z, method= "spearman"),
+                  Raw_metric = cor(alpha, obs, method = "spearman")) %>%
             gather(key = "raw_or_Z", value = "value", Z_score, Raw_metric )
 
 
 match <- filter(.data = for.plot,
-                type == "matching components")
+                type == "matching component ")
+
 
 
 bx <- ggplot(data=for.plot, aes(x = type, y = abs(value))) + 
@@ -176,7 +178,7 @@ bx <- ggplot(data=for.plot, aes(x = type, y = abs(value))) +
   facet_grid(cols = vars(raw_or_Z)) +
   theme_bw() + #coord_flip() +
   theme(legend.position="none") +
-  labs(y = "|Kendall's rank correlation with truth|", x = "")
+  labs(y = "| Spearman correlation with alpha |", x = "")
 
 png("../results/simulation_results.png", width=1200, height=700, res=190)
   print(bx)
@@ -189,10 +191,125 @@ ddply(for.plot, .(type, raw_or_Z), summarise, med = median(abs(value)))
 ddply(for.plot, .(type, raw_or_Z), summarise, med = IQR(abs(value)))
 
 
-
 # which are the extremely poorly performing indices?
 x <- for.plot[for.plot$type == "existing index",]
 x <- x[order(abs(x$value)),]
 head(x)
 x <- x[order(abs(x$value), decreasing = TRUE),]
 head(x)
+
+
+# which are the extremely well performing raw indices?
+x <- for.plot[for.plot$raw_or_Z == "Raw_metric",]
+x <- x[order(abs(x$value)),]
+head(x)
+x <- x[order(abs(x$value), decreasing = FALSE),]
+head(x)
+
+
+
+     
+
+
+
+################################################################################ 
+# Simulation parameters
+################################################################################
+
+params <- expand.grid(var.consp   = c(0.001, 0.01, 0.1, 1),
+                      alpha = seq(-20, 20, by=2.5),
+                      grain = c(32, 16, 8),
+                      N1 = c(100, 1000),
+                      N2 = c(100, 1000))
+
+################################################################################ 
+# Simulations
+################################################################################
+
+registerDoMC(cores = 4)
+
+
+JACC <- foreach(j = 1:nrow(params), .combine = "rbind") %dopar%
+{
+    #message(paste("Simulation", j, "out of", nrow(params)))
+    
+    a <- sim.pair(abund.vect = c(params$N1[j], params$N2[j]),
+                  var.consp = params$var.consp[j],
+                  alpha = params$alpha[j],
+                  plot.comm = FALSE)
+    
+    n.cells.side <- sqrt(params[j, 'grain'])
+    
+    m <- spasm::ppp.to.comm(a, dim.yx = c(n.cells.side, n.cells.side))$abundance
+    
+    # convert to binary matrix
+    m.bin <-  m
+    m.bin[m >= 1] <- 1
+    
+    Z.a <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = "a")[]
+    Z.b <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = "b")[]
+    Z.c <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = "c")[]
+    Z.d <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = "d")[]
+    Z.jacc <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = "a / (a + b + c)")[]
+    #Z <- Z_score_pair_analytic(m.bin, form = form)[]
+    
+    data.frame(a = Z.a['obs'],
+               b = Z.b['obs'],
+               c = Z.c['obs'],
+               d = Z.d['obs'],
+               Zscore_a = Z.a['Z'], 
+               Zscore_b = Z.b['Z'],
+               Zscore_c = Z.c['Z'], 
+               Zscore_d = Z.d['Z'],
+               Zscore_Jaccard = Z.jacc['Z'], 
+               Jaccard = Z.jacc['obs'],
+               params[j,])
+}
+
+
+plot(JACC$alpha, JACC$a)
+cor(JACC$alpha, JACC$b, method = "spearman")
+
+
+a_vs_jacc <- ggplot(data = JACC, aes(x = Jaccard, Zscore_a)) +
+             geom_point(shape = 1) + theme_bw() + ggtitle("a")
+a_vs_jacc
+
+
+alpha_vs_jacc <- ggplot(data = JACC, aes(x = alpha, Jaccard)) +
+  geom_point(shape = 1) + geom_smooth(method = "lm", se = FALSE) + theme_bw() + ggtitle("b")
+alpha_vs_jacc
+
+
+alpha_vs_Z <- ggplot(data = JACC, aes(x = alpha, Zscore_a)) +
+  geom_point(shape = 1) + geom_smooth(method = "lm", se = FALSE) + theme_bw() + ggtitle("c")
+alpha_vs_Z
+
+
+png("../results/Z_vs_Jaccard.png", width= 1200, height = 400, res=100)
+grid.arrange(a_vs_jacc, alpha_vs_jacc, alpha_vs_Z, ncol=3)
+dev.off()
+
+
+
+
+
+a <- sim.pair(abund.vect = c(100, 100),
+                        var.consp = 0.001,
+                        alpha = 20,
+                        plot.comm = TRUE)
+m <- spasm::ppp.to.comm(a, dim.yx = c(8,8))$abundance
+m.bin <-  m
+m.bin[m >= 1] <- 1
+
+# b and c components
+sum(colSums(m.bin) == 2) # a
+sum(colSums(m.bin) == 1 & m.bin[1,] == 1) # b
+sum(colSums(m.bin) == 1 & m.bin[2,] == 1) # c
+sum(colSums(m.bin) == 0) # d
+
+m.bin
+Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 200, form = "a")[]
+Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 200, form = "b")[]
+Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 200, form = "c")[]
+Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 200, form = "d")[]
