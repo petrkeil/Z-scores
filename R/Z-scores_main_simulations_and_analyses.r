@@ -208,9 +208,18 @@ head(x)
 
 
 
-     
+  
 
 
+
+   
+
+################################################################################
+# Extra simulations that are now not part of the manuscript. I used these
+# to explore how regular Jaccard compares to the Z-scored matching components.
+# -- this is something that emerged from a discussion with Arnost L. Sizling
+# prior to the first submission. 
+################################################################################ 
 
 ################################################################################ 
 # Simulation parameters
@@ -269,7 +278,6 @@ JACC <- foreach(j = 1:nrow(params), .combine = "rbind") %dopar%
 
 plot(JACC$alpha, JACC$a)
 cor(JACC$alpha, JACC$b, method = "spearman")
-
 
 a_vs_jacc <- ggplot(data = JACC, aes(x = Jaccard, Zscore_a)) +
              geom_point(shape = 1) + theme_bw() + ggtitle("a")

@@ -68,7 +68,7 @@ pdfs <- ggplot(data = res, aes(x = Distance, y = pdf)) +
   theme(panel.grid = element_blank(),
         plot.margin=unit(c(5.5,25,5.5,4), "points")) +
   scale_x_continuous(breaks = c(0, 1)) +
-  ylab(expression(f[sp2](D))) + xlab("D") +
+  ylab(expression(f[sp2](r))) + xlab("r") +
   labs(title = "(b)")
 pdfs
 
@@ -117,10 +117,10 @@ par(mfrow=c(2,3), mai = c(0.3, 0.3, 0.3, 0.3), adj=0)
   sp1.prob[] <- PDFtexp(sp1.dist[], alpha)
   sp1.prob <- sp1.prob/sum(sp1.prob)
 
-  plot(sp1.dist, main = expression("(d) D"))
+  plot(sp1.dist, main = expression("(d) r"))
   contour(sp1.dist, add=T, col="white")
 
-  plot(sp1.prob, main = expression(paste("(e) ", f[sp2], "(D)")))
+  plot(sp1.prob, main = expression(paste("(e) ", f[sp2], "(r)")))
   contour(sp1.prob, add=T, col="white")
 
   sp2 <- rpoint(n = 100, f = sp1.prob)
