@@ -200,9 +200,12 @@ bx <- ggplot(data=for.plot, aes(x = type, y = abs(value))) +
   scale_fill_tableau()
 
 
-pdf("../results/simulation_results.pdf", width=1200, height=700, res=190)
+# -----------------------------------------------
+pdf("../results/Figure_3.pdf", width=6, height=4)
   print(bx)
 dev.off()
+# -----------------------------------------------
+
 
 # boxplots medians
 ddply(for.plot, .(type, raw_or_Z), summarise, med = median(abs(value)))
@@ -273,7 +276,7 @@ cols <- c(#"#8da0cb", # colour for alpha
 wide.cor <- cor(wide, use = "complete.obs", method = "spearman")
 
 # plot the graph
-pdf("../results/graph.pdf", width=10, height=15)
+pdf("../results/Figure_2.pdf", width=10, height=15)
 qgraph(wide.cor, 
        layout = "spring",
        edge.color = "black",
@@ -297,11 +300,14 @@ cor.Z <- data.frame(correlation = cor.Z, type = "Z_score")
 
 cor.all <- rbind(cor.obs, cor.Z)
 
+pdf("../results/Figure_1.pdf", width=3.5, height=4)
 ggplot(data=cor.all, aes(x = type, y =abs(correlation))) + 
       geom_boxplot(width = 0.5, aes(fill = type), outlier.shape = 1) +
       theme_bw() +
+      theme(legend.position="none") +
       labs(y = "| Between-index Spearman correlation |", x = "") +
       scale_fill_tableau()
+dev.off()
 
 ################################################################################
 # Extra simulations that are now not part of the manuscript. I used these
