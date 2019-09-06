@@ -1,6 +1,7 @@
 
 # Code for the Z-score analysis
 # Author: Petr Keil
+# September 2019
 # pkeil@seznam.cz
 
 
@@ -11,17 +12,26 @@
 # library(devtools)
 # install_github("petrkeil/spasm")
 library(spasm)
+
 library(tidyverse)
 library(vegan)
 library(plyr)
+library(dplyr)
 library(foreach)
 library(doMC)
 library(ggrepel)
 library(gridExtra)
+library(reshape2)
+library(qgraph)
+library(ggthemes)
 
 ################################################################################
 # Randomization algorithm (null model).
 ################################################################################
+
+# Arguments:
+# m - a 2-row binary matrix where the two rows are the two quantities to be related
+#     by the index formula
 
 step_C_sim2 <- function(m)
 {
@@ -32,12 +42,16 @@ step_C_sim2 <- function(m)
 # function that calculates the given index (so far works for 2 species only)
 ################################################################################
 
+# Arguments:
+# m - a 2-row binary matrix where the two rows are the two quantities to be related
+#     by the index formula
+# form - index formula with a, b, c, d and n components
+
 pk.dist <- function(m, form)
 {
   x <- m[1,] # species x
   y <- m[2,] # species y
-  
-  
+
   # matching components
   a = sum(colSums(m) == 2)
   b = sum(x * (colSums(m) == 1) )
@@ -52,6 +66,13 @@ pk.dist <- function(m, form)
 ################################################################################
 # function that calculates the Z-score
 ################################################################################
+
+# Arguments:
+# m - a 2-row binary matrix where the two rows are the two quantities to be related
+#     by the index formula
+# algorithm - name of the randomization algorithm function, e.g. step_C_sim2
+# N.sim - number of times that the algorithm is repeated
+# form - index formula with a, b, c, d and n components
 
 Z_score <- function(m, algorithm, N.sim, form)
 {
@@ -76,10 +97,10 @@ Z_score <- function(m, algorithm, N.sim, form)
   return(c(Z=Z, obs=obs))
 }
 
-
-#m <- matrix(c(1,1,1,0,0,
-#              0,0,1,1,0), byrow=TRUE, nrow=2, ncol=5)
-#Z_score(m, algorithm="step_C_sim2", N.sim=1000, form = "a/n")
+# Testing of the code:
+m <- matrix(c(1,1,1,0,0,
+              0,1,1,1,0), byrow=TRUE, nrow=2, ncol=5)
+Z_score(m, algorithm="step_C_sim2", N.sim=1000, form = "a/(a+b+c)") # Jaccard example
 
 
 ################################################################################
@@ -110,41 +131,38 @@ params <- expand.grid(var.consp   = c(0.001, 0.01, 0.1),
 registerDoMC(cores = 4)
 
 output <- list()
-for (i in 1:nrow(formulas))
+for(j in 1:nrow(params))
 {
-  print(i)
-  form <- as.character(formulas$formula[i])
-  message(form)
+  print(j)
+  print(params[j,])
   
-  output[[i]] <- foreach(j = 1:nrow(params), .combine = "rbind") %dopar%
+  # simulate the community
+  a <- sim.pair(abund.vect = c(params$N1[j], params$N2[j]),
+                var.consp = params$var.consp[j],
+                alpha = params$alpha[j],
+                plot.comm = FALSE)
+  
+  n.cells.side <- sqrt(params[j, 'grain'])
+  
+  m <- spasm::ppp.to.comm(a, dim.yx = c(n.cells.side, n.cells.side))$abundance
+  
+  # convert to binary matrix
+  m.bin <- m
+  m.bin[m >= 1] <- 1
+  
+  output[[j]] <- foreach(i = 1:nrow(formulas), .combine = "rbind") %dopar%
   {
-      #message(paste("Simulation", j, "out of", nrow(params)))
-
-      a <- sim.pair(abund.vect = c(params$N1[j], params$N2[j]),
-                    var.consp = params$var.consp[j],
-                    alpha = params$alpha[j],
-                    plot.comm = FALSE)
-
-      n.cells.side <- sqrt(params[j, 'grain'])
-
-      m <- spasm::ppp.to.comm(a, dim.yx = c(n.cells.side, n.cells.side))$abundance
-
-      # convert to binary matrix
-      m.bin <-  m
-      m.bin[m >= 1] <- 1
-
-      Z <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = form)[]
-      #Z <- Z_score_pair_analytic(m.bin, form = form)[]
-      
-      data.frame(Z = Z['Z'], obs = Z['obs'],
-                             params[j,],
-                             formula = form,
-                             index_no = formulas$index_no[i],
-                             type = formulas$type[i])
-    }
-
+    form <- as.character(formulas$formula[i])
+    Z <- Z_score(m.bin, algorithm = "step_C_sim2", N.sim = 400, form = form)[]
+    
+    data.frame(sim.no = j,
+               Z = Z['Z'], obs = Z['obs'],
+               params[j,],
+               formula = form,
+               index_no = formulas$index_no[i],
+               type = formulas$type[i])
+  }
 }
-
 
 res <- ldply(output)
 write.csv(res, file = "../results/simulation_results.csv", row.names=FALSE)
@@ -178,9 +196,11 @@ bx <- ggplot(data=for.plot, aes(x = type, y = abs(value))) +
   facet_grid(cols = vars(raw_or_Z)) +
   theme_bw() + #coord_flip() +
   theme(legend.position="none") +
-  labs(y = "| Spearman correlation with alpha |", x = "")
+  labs(y = "| Spearman correlation with alpha |", x = "") +
+  scale_fill_tableau()
 
-png("../results/simulation_results.png", width=1200, height=700, res=190)
+
+pdf("../results/simulation_results.pdf", width=1200, height=700, res=190)
   print(bx)
 dev.off()
 
@@ -207,12 +227,81 @@ x <- x[order(abs(x$value), decreasing = FALSE),]
 head(x)
 
 
+################################################################################
+# Pretty QGRAPH network figure, and summary of pairwise correlations
+################################################################################
 
-  
+# Plotting the correlations between the indices, and visualizing them in a qgraph
+
+# extract the raw forms of indices in a wide format
+wide.obs <- dcast(res, sim.no ~ index_no, value.var = "obs")
+
+# remove columns (indices) with more than 20 NAs
+sum.NAs <- function(x) sum(is.na(x))
+wide.obs.NA <- apply(X=wide.obs, MARGIN=2, FUN=sum.NAs)
+wide.obs <- wide.obs[, wide.obs.NA < 20]
+
+# extract Z-scores in a wide format
+wide.Z <- dcast(res, sim.no ~ index_no, value.var = "Z")
+
+# remove columns (indices) with more than 20 NAs
+wide.Z.NA <- apply(X=wide.Z, MARGIN=2, FUN=sum.NAs)
+wide.Z <- wide.Z[, wide.Z.NA < 20]
+
+# indicate that these are Z-scores in column names
+names(wide.Z)[2:ncol(wide.Z)] <- paste("Z", names(wide.Z)[2:ncol(wide.Z)])
+
+
+# Potentially add the alpha parameter for reference:
+# wide.alpha <- unique(dplyr::select(res, sim.no, alpha))
+
+
+# merge the wide datsets
+wide <- merge(wide.obs, wide.Z, by="sim.no")
+#wide <- merge(wide.alpha, wide, by = "sim.no")
+wide <- wide[,-1]
+
+
+cols <- c(#"#8da0cb", # colour for alpha
+          #"yellow",
+          rep("#66c2a5", times = ncol(wide.obs)), # colour for raw indices
+          rep( "#fc8d62", times = ncol(wide.Z))) # colour for Z-scores
 
 
 
-   
+# convert the raw data to correlation matrix
+wide.cor <- cor(wide, use = "complete.obs", method = "spearman")
+
+# plot the graph
+pdf("../results/graph.pdf", width=10, height=15)
+qgraph(wide.cor, 
+       layout = "spring",
+       edge.color = "black",
+       #labels = FALSE,
+       color = cols)
+dev.off()
+
+
+# ------------------------------------------------------------------------------
+# Summary of correlations
+
+# what are the average spearman correlations between the raw indices?
+cor.obs <- cor(wide.obs[,-1], use = "complete.obs", method = "spearman")
+cor.obs <- cor.obs[lower.tri(cor.obs)]
+cor.obs <- data.frame(correlation = cor.obs, type = "Raw_metric")
+
+# what what are the spearman correlations between the raw indices?
+cor.Z <- cor(wide.Z[,-1], use = "complete.obs", method = "spearman")
+cor.Z <- cor.Z[lower.tri(cor.Z)]
+cor.Z <- data.frame(correlation = cor.Z, type = "Z_score")
+
+cor.all <- rbind(cor.obs, cor.Z)
+
+ggplot(data=cor.all, aes(x = type, y =abs(correlation))) + 
+      geom_boxplot(width = 0.5, aes(fill = type), outlier.shape = 1) +
+      theme_bw() +
+      labs(y = "| Between-index Spearman correlation |", x = "") +
+      scale_fill_tableau()
 
 ################################################################################
 # Extra simulations that are now not part of the manuscript. I used these
