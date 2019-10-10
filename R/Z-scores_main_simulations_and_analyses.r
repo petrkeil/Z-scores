@@ -183,8 +183,7 @@ for.plot <- ddply(.data = res,
 
 
 match <- filter(.data = for.plot,
-                type == "matching component ")
-
+                type == "Matching component ")
 
 
 bx <- ggplot(data=for.plot, aes(x = type, y = abs(value))) + 
@@ -215,7 +214,7 @@ ddply(for.plot, .(type, raw_or_Z), summarise, med = IQR(abs(value)))
 
 
 # which are the extremely poorly performing indices?
-x <- for.plot[for.plot$type == "existing index",]
+x <- for.plot[for.plot$type == "Index",]
 x <- x[order(abs(x$value)),]
 head(x)
 x <- x[order(abs(x$value), decreasing = TRUE),]
@@ -281,7 +280,7 @@ qgraph(wide.cor,
        layout = "spring",
        edge.color = "black",
        #labels = FALSE,
-       color = cols)
+       color = cols, label.cex= 1.7)
 dev.off()
 
 
