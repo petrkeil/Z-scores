@@ -178,18 +178,17 @@ for.plot <- ddply(.data = res,
                   .variables = c("formula", "type"),
                   .fun=summarise,
                   Z_score = cor(alpha, Z, method= "spearman"),
-                  Raw_metric = cor(alpha, obs, method = "spearman")) %>%
-            gather(key = "raw_or_Z", value = "value", Z_score, Raw_metric )
-
+                  Raw_index = cor(alpha, obs, method = "spearman")) 
+for.plot <- gather(for.plot, key = "raw_or_Z", value = "value", Z_score, Raw_index )
+for.plot$raw_or_Z[for.plot$raw_or_Z == "Z_score"] <- "Z-score"
+for.plot$raw_or_Z[for.plot$raw_or_Z == "Raw_index"] <- "Raw index"
 
 match <- filter(.data = for.plot,
                 type == "Matching component ")
 
 
 bx <- ggplot(data=for.plot, aes(x = type, y = abs(value))) + 
-  # geom_violin(aes(fill = color), scale = "width") +
   geom_boxplot(width = 0.5, aes(fill = type), outlier.shape = 1) +
-  # stat_summary(fun.y=median, geom="point", size=2, aes(colour = type)) +
   geom_label_repel(data = match, aes(x = type, y = abs(value), label = formula), 
                    nudge_x = 0.1) +
   facet_grid(cols = vars(raw_or_Z)) +
@@ -222,7 +221,7 @@ head(x)
 
 
 # which are the extremely well performing raw indices?
-x <- for.plot[for.plot$raw_or_Z == "Raw_metric",]
+x <- for.plot[for.plot$raw_or_Z == "Raw index",]
 x <- x[order(abs(x$value)),]
 head(x)
 x <- x[order(abs(x$value), decreasing = FALSE),]
@@ -290,12 +289,12 @@ dev.off()
 # what are the average spearman correlations between the raw indices?
 cor.obs <- cor(wide.obs[,-1], use = "complete.obs", method = "spearman")
 cor.obs <- cor.obs[lower.tri(cor.obs)]
-cor.obs <- data.frame(correlation = cor.obs, type = "Raw_metric")
+cor.obs <- data.frame(correlation = cor.obs, type = "Raw index")
 
 # what what are the spearman correlations between the raw indices?
 cor.Z <- cor(wide.Z[,-1], use = "complete.obs", method = "spearman")
 cor.Z <- cor.Z[lower.tri(cor.Z)]
-cor.Z <- data.frame(correlation = cor.Z, type = "Z_score")
+cor.Z <- data.frame(correlation = cor.Z, type = "Z-score")
 
 cor.all <- rbind(cor.obs, cor.Z)
 
@@ -307,6 +306,15 @@ ggplot(data=cor.all, aes(x = type, y =abs(correlation))) +
       labs(y = "| Between-index Spearman correlation |", x = "") +
       scale_fill_tableau()
 dev.off()
+
+
+
+
+
+
+
+
+
 
 ################################################################################
 # Extra simulations that are now not part of the manuscript. I used these
